@@ -145,6 +145,14 @@ let incomeItem = document.querySelector('.choose-income'),
         timeData: time,
         savings: false
         };
+
+
+
+
+
+
+
+
         // chooseExpenses: function() {
           
         // },
