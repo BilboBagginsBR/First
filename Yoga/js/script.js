@@ -37,7 +37,7 @@ window.addEventListener('DOMContentLoaded', function() {
 
     // Timer
 
-        let deadline = '2019-04-23';
+        let deadline = '2019-07-23';
 
         function getTimeRemaning(endtime) {
             let t = Date.parse(endtime) - Date.parse(new Date()),
@@ -74,4 +74,134 @@ window.addEventListener('DOMContentLoaded', function() {
 
         setClock('timer', deadline);
 
+        // Modal
+
+        let more = document.querySelector('.more'),
+            overlay = document.querySelector('.overlay'),
+            close = document.querySelector('.popup-close'),
+            description = document.querySelector('.info');
+
+
+        more.addEventListener('click', function() {
+            overlay.style.display = 'block';
+            this.classList.add('more-splash');
+            document.body.style.overflow = 'hidden';
+        });
+
+        close.addEventListener('click', function() {
+            overlay.style.display = 'none';
+            more.classList.remove('more-splash');
+            document.body.style.overflow = '';    
+        });   
+        description.addEventListener('click', function() {
+            let target = event.target;
+            if (target && target.classList.contains('description-btn')){
+                overlay.style.display = 'block';
+                this.classList.add('more-splash');
+                document.body.style.overflow = 'hidden';
+            }
+            
+            
+        
+        });
+
+
+    // Form
+        let message = {
+            loading: 'loading...',
+            success: 'Thank you! See soon',
+            failure: 'Something wrong...'
+        };
+        let form = document.querySelector('.main-form'),
+            input = document.getElementsByTagName('input'),
+            statusMessage = document.createElement('div');
+
+        statusMessage.classList.add('status');
+
+        form.addEventListener('submit', function(event) {
+            event.preventDefault();
+            form.appendChild(statusMessage);    
+
+            let request = new XMLHttpRequest();
+
+            request.open('POST', 'server.php');
+            request.setRequestHeader('Content-type', 'application/json; charset=utf-8');
+
+            let formData = new FormData(form);
+
+            let obj = {};
+
+            formData.forEach(function(value, key) {
+                obj[key] = value;
+            });
+
+            let json = JSON.stringify(obj);
+
+            request.send(json);
+
+        request.addEventListener('readystatechange', function() {
+            if (request.readyState < 4) {
+                statusMessage.innerHTML = message.loading;
+            } else if (request.readyState === 4 && request.status == 200) {
+                statusMessage.innerHTML = message.success;
+            } else {
+                statusMessage.innerHTML = message.failure;
+            }
+        });
+
+        for (let i = 0; i < input.length; i++) {
+            input[i].value = '';
+        }
+
+        });
+
+        let message1 = {
+            loading: 'loading...',
+            success: 'Thank you! See soon',
+            failure: 'Something wrong...'
+        };
+
+        let newForm = document.getElementById('form'),
+            statusMessage1 = document.createElement('div'),
+            input1 = newForm.getElementsByTagName('input');
+           
+        newForm.addEventListener('submit', function(event) {
+            
+            event.preventDefault();
+            newForm.appendChild(statusMessage1);    
+
+            let request1 = new XMLHttpRequest();
+
+            request1.open('POST', 'server.php');
+            request1.setRequestHeader('Content-type', 'application/json; charset=utf-8');
+
+            let formData1 = new FormData(newForm);
+          
+            let obj1 = {};
+
+            formData1.forEach(function(value, key) {
+                obj1[key] = value;
+            });
+
+            let json1 = JSON.stringify(obj1);
+
+            request1.send(json1);
+
+            request1.addEventListener('readystatechange', function() {
+                if (request1.readyState < 4) {
+                    statusMessage1.innerHTML = message1.loading;
+                } else if (request1.readyState === 4 && request1.status == 200) {
+                    statusMessage1.innerHTML = message1.success;
+                } else {
+                    statusMessage1.innerHTML = message1.failure;
+                }
+            });
+    
+            for (let i = 0; i < input1.length; i++) {
+                input1[i].value = '';
+            }
+
+        });
+        
 });
+
